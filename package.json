@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.82.0",
+    "memorystream": "^0.3.1",
+    "wkhtmltopdf": "^0.3.4"
+  }
+}
