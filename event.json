@@ -1,0 +1,8 @@
+{
+  "body": {
+    "host": "www.google.com",
+    "path": "/",
+    "fileName": "test.html",
+    "bucket": "simeonhtmltopdf"
+  }
+}

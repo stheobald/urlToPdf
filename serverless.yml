@@ -6,29 +6,45 @@
 
 # The `service` block is the name of the service
 service: serverless-pdf
+plugins:
+  - serverless-offline
+  - serverless-s3-local
+  - serverless-plugin-optimize
 
 custom:
+  s3:
+    port: 8000
+    buckets:
+      - simeonhtml2pdf
+    directory: /tmp
+    cors: false
   bucket: simeonhtml2pdf
+  webpackIncludeModules: true
+
+package:
+  individually: true
+#   include:
+#     - binaries/**
 
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
   runtime: nodejs6.10
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - s3:*
-      Resource: "*"
   # iamRoleStatements:
   #   - Effect: Allow
   #     Action:
-  #       - s3:PutObject
-  #     Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+  #       - s3:*
+  #     Resource: "*"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
 # The `functions` block defines what code to deploy
 functions:
   html:
-    handler: handler.handler
+    handler: html.handler
     environment:
       BUCKET: ${self:custom.bucket}
     # The `events` block defines how to trigger the handler.handler code
@@ -37,9 +53,3 @@ functions:
           path: topdf
           method: post
           cors: true
-  toPdf:
-    handler: hander.pdfHandler
-    events:
-      - s3:
-          bucket: ${self:custom.bucket}
-          event: s3:ObjectCreated:*
